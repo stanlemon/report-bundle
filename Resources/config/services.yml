@@ -1,0 +1,46 @@
+
+parameters:
+    lemon_report.report_loader.class: "Lemon\\ReportBundle\\Entity\\ReportRepository"
+
+
+services:
+
+    twig.loader.string:
+        class: "Twig_Loader_String"
+        tags:
+            - { name: twig.loader }
+
+    lemon_report.configure_menu_listener:
+        class: Lemon\ReportBundle\EventListener\ConfigureMenuListener
+        tags:
+          - { name: kernel.event_listener, event: lemon_bootstrap.menu_configure, method: onMenuConfigure }
+
+    lemon_report.query_renderer:
+        class: "Lemon\\ReportBundle\\Report\\Query\\Renderer"
+        calls:
+            - [ setTwig, ["@twig"] ]
+
+    lemon_report.report_executor:
+        class: "Lemon\\ReportBundle\\Report\\Executor"
+        calls:
+            - [ setConnection, [@doctrine.dbal.default_connection] ]
+            - [ setLogger, ["@logger"] ]
+            - [ setQueryRenderer, ["@lemon_report.query_renderer"] ]
+
+    lemon_report.report_loader:
+        class: "%lemon_report.report_loader.class%"
+        factory_service: doctrine
+        factory_method: getRepository
+        arguments:
+            - "Lemon\\ReportBundle\\Entity\\Report"
+        calls:
+            - [ setLogger, ["@logger"] ]
+
+    lemon_report.report_controller: 
+        class: "Lemon\\ReportBundle\\Controller\\DefaultController"
+        shared: true
+        calls:
+            - [ setContainer, ["@service_container"] ]
+            - [ setReportLoader, ["@lemon_report.report_loader"] ]
+            - [ setReportExecutor, ["@lemon_report.report_executor"] ]
+            - [ setLogger, ["@logger"] ]

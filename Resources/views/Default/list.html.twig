@@ -1,0 +1,28 @@
+{% extends 'LemonReportBundle::layout.html.twig' %}
+
+{% block body %}
+
+{% if reports is empty %}
+    <div>There are no reports currently configured.</div>
+{% else %}
+    <table id="report-listing" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in reports %}
+            <tr>
+                <td class="report-name">
+                    <a href="{{path('report_view', {id: report.id })}}">
+                        {{report.name}}
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+{% endblock %}
