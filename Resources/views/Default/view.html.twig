@@ -4,9 +4,11 @@
 
     <h2>{{report.name}}</h2>
 
+    {% if report.parameters is not empty %}
     <form method="post" {{ form_enctype(form) }}>
         {{form_widget(form)}}
     </form>
+    {% endif %}
 
     <div class="row">
         <div class="span8">

@@ -19,19 +19,46 @@ class ReportRepository extends EntityRepository implements LoaderInterface
 
     public function findById($id)
     {
-        return $this->findOneById($id);
+        $qb = $this->_em->createQueryBuilder();
+
+        $qb->select('r, rp')
+            ->from('Lemon\ReportBundle\Entity\Report', 'r')
+            ->leftJoin('r.parameters', 'rp', 'WITH', 'rp.active = true')
+            ->where('r.active = true')
+        ;
+
+        if (is_numeric($id)) {
+            $qb->andWhere("r.id = :id");
+        } else {
+            $qb->andWhere("r.slug = :id");
+        }
+
+        $query = $qb->getQuery();
+
+        $query->setParameters(array(
+            'id' => $id
+        ));
+
+        $report = $query->getSingleResult();
+
+        return $report;
     }
-    
-    public function findByKey($key)
-    {
-        return $this->findOneByKey($key);
-    }
-    
+
     public function findAll()
     {
-        return $this->findBy(array(
-            'active' => 1
-        ));
+        $qb = $this->_em->createQueryBuilder();
+
+        $qb->select('r, rp')
+            ->from('Lemon\ReportBundle\Entity\Report', 'r')
+            ->leftJoin('r.parameters', 'rp', 'WITH', 'rp.active = true')
+            ->where('r.active = true')
+        ;
+
+        $query = $qb->getQuery();
+
+        $reports = $query->getResult();
+
+        return $reports;
     }
 
     public function setLogger(LoggerInterface $logger)

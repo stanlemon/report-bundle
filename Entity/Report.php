@@ -228,13 +228,18 @@ class Report
     {
         return $this->modified;
     }
-    
-    
+
+
     public function getParameters()
     {
         return $this->parameters;
     }
-    
+
+    public function hasParameters()
+    {
+        return !empty($this->parameters);
+    }
+
     public function getParameterArray()
     {
         $parameters = array();
