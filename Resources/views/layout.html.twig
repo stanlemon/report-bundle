@@ -1,3 +1,11 @@
 {% extends '::base.html.twig' %}
 
+{% block css %}
+    {{ parent() }}
+
+    {% stylesheets '@LemonReportBundle/Resources/public/css/*.css' %}
+        <link href="{{ asset_url }}" rel="stylesheet">
+    {% endstylesheets %}
+{% endblock css %}
+
 {% block body %}{% endblock %}
