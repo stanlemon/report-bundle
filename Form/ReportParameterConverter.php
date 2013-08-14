@@ -3,6 +3,7 @@ namespace Lemon\ReportBundle\Form;
 
 use Symfony\Component\Form\Forms;
 use Symfony\Component\HttpFoundation\Request;
+use Psr\Log\LoggerInterface;
 
 use Lemon\ReportBundle\Entity\Report;
 use Lemon\ReportBundle\Entity\ReportParameter;
@@ -14,11 +15,12 @@ class ReportParameterConverter
     protected $request;
     protected $formName;
 
-    public function __construct(Report $report, Request $request, $formName = 'lemon_report_form')
+    public function __construct(Report $report, Request $request, LoggerInterface $logger, $formName = 'lemon_report_form')
     {
         $this->report = $report;
         $this->request = $request;
         $this->formName = $formName;
+        $this->logger = $logger;
     }
 
     public function createForm()
@@ -26,6 +28,8 @@ class ReportParameterConverter
         $formFactory = Forms::createFormFactory();
 
         $formBuilder = $formFactory->createNamedBuilder('lemon_report_form');
+
+        $this->logger->info(count($this->report->getParameters()));
 
         foreach ($this->report->getParameters() as $parameter) {
             $options = $this->getFieldOptions($parameter);

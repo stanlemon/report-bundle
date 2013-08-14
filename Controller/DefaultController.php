@@ -8,6 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Psr\Log\LoggerInterface;
+use Pagerfanta\Pagerfanta;
+use Pagerfanta\Adapter\ArrayAdapter;
 
 use Lemon\ReportBundle\Report\Executor;
 use Lemon\ReportBundle\Report\ColumnBuilder;
@@ -42,9 +44,10 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/view/{id}/{page}", name="report_view_page")
      * @Route("/view/{id}.{_format}", name="report_view", defaults={"_format" = "html"})
      */
-    public function viewAction(Request $request, $id)
+    public function viewAction(Request $request, $id, $page = 1)
     {
         $report = $this->reportLoader->findById($id);
 
@@ -52,7 +55,7 @@ class DefaultController extends Controller
             throw new NotFoundHttpException("Report does not exist!");
         }
 
-        $converter = new ReportParameterConverter($report, $request);
+        $converter = new ReportParameterConverter($report, $request, $this->logger);
         $form = $converter->createForm();
 
         $results = $this->reportExecutor->setReport($report)
@@ -83,7 +86,19 @@ class DefaultController extends Controller
                 return $response;
 
             default:
+                $adapter = new ArrayAdapter($results);
+
+                $pagerfanta = new Pagerfanta($adapter);
+                $pagerfanta->setMaxPerPage(25);
+
+                try {
+                    $pagerfanta->setCurrentPage($page);
+                } catch (NotValidCurrentPageException $e) {
+                    throw new NotFoundHttpException();
+                }
+
                 return $this->render('LemonReportBundle:Default:view.html.twig', array(
+                    'pagerfanta' => $pagerfanta,
                     'report'    => $report,
                     'form'      => $form->createView(),
                     'query'     => \SqlFormatter::format($this->reportExecutor->getQuery()),

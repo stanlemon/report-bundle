@@ -36,7 +36,7 @@
             </tr>
         </thead>
         <tbody>
-        {% for result in results %}
+        {% for result in pagerfanta.currentPageResults %}
             <tr>
             {% for key, value in result %}
                 <td>{{value}}</td>
@@ -45,6 +45,10 @@
         {% endfor %}
         </tbody>
     </table>
+
+    <div class="pagerfanta">
+        {{ pagerfanta(pagerfanta, 'twitter_bootstrap') }}
+    </div>
 
     <h4>Query</h4>
     {{query|raw}}
