@@ -50,7 +50,8 @@
         {{ pagerfanta(pagerfanta, 'twitter_bootstrap') }}
     </div>
 
-    <h4>Query</h4>
-    {{query|raw}}
-
+    {% if app.debug %}
+        <h4>Query</h4>
+        {{query|raw}}
+    {% endif %}
 {% endblock %}
