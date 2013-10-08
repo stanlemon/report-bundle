@@ -69,11 +69,9 @@ class DefaultController extends Controller
 
         $form = $formBuilder->getForm();
 
-        if (!$request->isMethod('post')) {
-            $form->setData(
-                $request->getSession()->get('report_' . $report->getSlug())
-            );
-        }
+        $form->setData(
+            $request->getSession()->get('report_' . $report->getSlug())
+        );
 
         $form->handleRequest();
 
