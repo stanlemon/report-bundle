@@ -39,7 +39,7 @@ class ReportRepository extends EntityRepository implements LoaderInterface
             'id' => $id
         ));
 
-        $report = $query->getSingleResult();
+        $report = $query->getOneOrNullResult();
 
         return $report;
     }

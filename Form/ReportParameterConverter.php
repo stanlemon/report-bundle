@@ -2,93 +2,83 @@
 namespace Lemon\ReportBundle\Form;
 
 use Symfony\Component\Form\Forms;
-use Symfony\Component\HttpFoundation\Request;
+use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
-
 use Lemon\ReportBundle\Entity\Report;
 use Lemon\ReportBundle\Entity\ReportParameter;
 
-
 class ReportParameterConverter 
 {
+    const PARAM_TYPE_QUERY = 'query';
+
     protected $report;
-    protected $request;
+    protected $connections;
+    protected $logger;
     protected $formName;
 
-    public function __construct(Report $report, Request $request, LoggerInterface $logger, $formName = 'lemon_report_form')
+    public function __construct(Report $report, Connection $connection, LoggerInterface $logger = null, $formName = null)
     {
         $this->report = $report;
-        $this->request = $request;
+        $this->connection = $connection;
         $this->formName = $formName;
         $this->logger = $logger;
     }
 
-    public function createForm()
+    public function createFormBuilder()
     {
         $formFactory = Forms::createFormFactory();
 
-        $formBuilder = $formFactory->createNamedBuilder('lemon_report_form');
-
-        $this->logger->info(count($this->report->getParameters()));
+        $formBuilder = $formFactory->createNamedBuilder($this->formName);
 
         foreach ($this->report->getParameters() as $parameter) {
-            $options = $this->getFieldOptions($parameter);
+            $options = $this->buildOptions($parameter);
 
             $formBuilder->add($parameter->getName(), $parameter->getType(), $options);
         }
 
-        $formBuilder->add('Submit', 'submit', array(
+        $formBuilder->add('Search', 'submit', array(
             'attr' => array(
-                'class' => 'btn'
+                'class' => 'btn btn-primary'
             )
         ));
 
-        return $formBuilder->getForm();
+        return $formBuilder;
     }
 
-    protected function getFieldOptions(ReportParameter $parameter)
+    protected function buildOptions(ReportParameter $parameter)
     {
-        $options = array(
-            'required'  => false,
-            'data'      => $this->getParameterValue($parameter),
-        );
-        
-        if ($parameter->getType() == 'date' || $parameter->getType() == 'time') {
-            $options = array_merge($options, array(
-                'widget' => 'single_text',
-            ));
-        }
+        $options = array();
 
-        if ($parameter->getType() == 'datetime') {
-            $options = array_merge($options, array(
-                'date_widget' => 'single_text',
-                'time_widget' => 'single_text',
-            ));
-        }
+        if ($parameter->getType() == self::PARAM_TYPE_QUERY) {
+            $stmt = $this->connection->prepare($parameter->getData());
+            $stmt->execute();
+            
+            $results = $stmt->fetchAll();
 
-        return $options;
-    }
+            $values = array();
 
-    /**
-     * @todo Data transformation should not be done this way
-     */
-    protected function getParameterValue(ReportParameter $parameter)
-    {
-        $params = $this->request->request->get($this->formName);
-        
-        if (isset($params[$parameter->getName()]) && !empty($params[$parameter->getName()])) {
-            $value = $params[$parameter->getName()];
+            $keySet = array_keys(current($results));
+            $key = current(array_slice($keySet, 0, 1));
+            $value = current(array_slice($keySet, 1, 1));
 
-            if ($parameter->getType() == 'date' || 
-                $parameter->getType() == 'time' ||
-                $parameter->getType() == 'datetime') {
-                
-                    $value = new \DateTime($value);
+            foreach ($results as $result) {
+                $values[$result[$key]] = $result[$value];
             }
 
-            $parameter->setValue($value);
+            $options = array_merge($options, array(
+                'choices' => $values,
+            ));
+
+            $parameter->setType('choice');
         }
 
-        return $parameter->getValue();
+        $normalizer = new \Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer();
+        $normalizer->setIgnoredAttributes(array('id', 'name', 'type', 'created', 'modified', 'active'));
+
+        $serializer = new \Symfony\Component\Serializer\Serializer(array($normalizer));
+
+        $options = array_merge($options, $serializer->normalize($parameter));
+
+        return $options;
     }
 }

@@ -2,19 +2,42 @@
 
 {% block title report.name %}
 
-{% block body %}
+{% form_theme form _self %}
 
-    <h2>{{report.name}}</h2>
+{% block form_row %}
+{% spaceless %}
+    <div class="span3">
+        {{ form_label(form) }}
+        {{ form_errors(form) }}
+        {{ form_widget(form) }}
+    </div>
+{% endspaceless %}
+{% endblock form_row %}
 
-    {% if report.parameters is not empty %}
-    <form method="post" {{ form_enctype(form) }}>
-        {{form_widget(form)}}
-    </form>
+{% block button_row %}
+{% spaceless %}
+    <div class="span3">
+        {{ form_widget(form) }}
+    </div>
+{% endspaceless %}
+{% endblock button_row %}
+
+{% block button_widget %}
+{% spaceless %}
+    {% if label is empty %}
+        {% set label = name|humanize %}
     {% endif %}
+    <label class="control-label">&nbsp;</label>
+    <button type="{{ type|default('button') }}" {{ block('button_attributes') }}>{{ label|trans({}, translation_domain) }}</button>
+{% endspaceless %}
+{% endblock button_widget %}
+
+
+{% block body %}
 
     <div class="row">
         <div class="span8">
-            <h3>Results</h3>
+            <h2>{{report.name}}</h2>
         </div>
         <div class="span4 text-right">
             <div class="btn-toolbar">
@@ -27,6 +50,15 @@
         </div>
     </div>
 
+    {% if report.parameters is not empty %}
+    <form method="post" {{ form_enctype(form) }}>
+        <div class="row">
+        {{form_widget(form)}}
+    </div>
+    </form>
+    {% endif %}
+
+    {% if pager.currentPageResults|length > 0 %}
     <table class="table table-hover table-bordered table-condensed table-unseen-col">
         <thead>
             <tr>
@@ -36,7 +68,7 @@
             </tr>
         </thead>
         <tbody>
-        {% for result in pagerfanta.currentPageResults %}
+        {% for result in pager.currentPageResults %}
             <tr>
             {% for key, value in result %}
                 <td>{{value}}</td>
@@ -45,9 +77,12 @@
         {% endfor %}
         </tbody>
     </table>
+    {% else %}
+    <div class="well">{% trans %}There are no results for this report.{% endtrans %}</div>
+    {% endif %}
 
     <div class="pagerfanta">
-        {{ pagerfanta(pagerfanta, 'twitter_bootstrap') }}
+        {{ pagerfanta(pager, 'twitter_bootstrap') }}
     </div>
 
     {% if app.debug %}

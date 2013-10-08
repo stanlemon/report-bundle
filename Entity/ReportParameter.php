@@ -31,9 +31,23 @@ class ReportParameter
     /**
      * @var string
      *
-     * @ORM\Column(name="default_value", type="string", length=255, nullable=true)
+     * @ORM\Column(name="label", type="string", length=255)
      */
-    private $defaultValue;
+    private $label;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="required", type="boolean")
+     */
+    private $required;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="data", type="string", length=255, nullable=true)
+     */
+    private $data;
 
     /**
      * @var string
@@ -68,8 +82,6 @@ class ReportParameter
      * @ORM\JoinColumn(name="report_id", referencedColumnName="id")
      */
     private $report;
-
-    private $value;
 
 
     public function __construct()
@@ -113,26 +125,72 @@ class ReportParameter
     }
 
     /**
-     * Set defaultValue
+     * Set required
      *
-     * @param string $defaultValue
+     * @param bool $required
      * @return ReportParameter
      */
-    public function setDefaultValue($defaultValue)
+    public function setRequired($required)
     {
-        $this->defaultValue = $defaultValue;
+        $this->required;
+
+        return $this;
+    }
+
+    /**
+     * Get required
+     *
+     * @return bool
+     */
+    public function getRequired()
+    {
+        return $this->required;
+    }
+
+    /**
+     * Set label
+     *
+     * @param string $label
+     * @return ReportParameter
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
+
+        return $this;
+    }
+
+    /**
+     * Get label
+     *
+     * @return string 
+     */
+    public function getLabel()
+    {
+        return $this->label;
+    }
+
+    /**
+     * Set data
+     *
+     * @param string $data
+     * @return ReportParameter
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
     
         return $this;
     }
 
     /**
-     * Get defaultValue
+     * Get data
      *
      * @return string 
      */
-    public function getDefaultValue()
+    public function getData()
     {
-        return $this->defaultValue;
+        return $this->data;
     }
 
     /**
@@ -225,20 +283,5 @@ class ReportParameter
     public function getActive()
     {
         return $this->active;
-    }
-    
-    public function setValue($value)
-    {
-        $this->value = $value;
-
-        return $this;
-    }
-    
-    public function getValue()
-    {
-        if (empty($this->value)) {
-            return $this->defaultValue;
-        }
-        return $this->value;
     }
 }

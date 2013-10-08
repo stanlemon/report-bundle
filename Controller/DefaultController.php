@@ -5,6 +5,8 @@ namespace Lemon\ReportBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationRequestHandler;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Psr\Log\LoggerInterface;
@@ -55,8 +57,18 @@ class DefaultController extends Controller
             throw new NotFoundHttpException("Report does not exist!");
         }
 
-        $converter = new ReportParameterConverter($report, $request, $this->logger);
-        $form = $converter->createForm();
+        $converter = new ReportParameterConverter(
+            $report, 
+            $this->get('doctrine.dbal.default_connection'), 
+            $this->logger
+        );
+
+        $formBuilder = $converter->createFormBuilder();
+        $formBuilder->setMethod($request->getMethod());
+
+        $form = $formBuilder->getForm();
+
+        $form->handleRequest();
 
         $results = $this->reportExecutor->setReport($report)
             ->execute();
@@ -98,7 +110,7 @@ class DefaultController extends Controller
                 }
 
                 return $this->render('LemonReportBundle:Default:view.html.twig', array(
-                    'pagerfanta' => $pagerfanta,
+                    'pager'     => $pagerfanta,
                     'report'    => $report,
                     'form'      => $form->createView(),
                     'query'     => \SqlFormatter::format($this->reportExecutor->getQuery()),

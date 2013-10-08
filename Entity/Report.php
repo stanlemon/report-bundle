@@ -245,7 +245,7 @@ class Report
         $parameters = array();
 
         foreach ($this->getParameters() as $parameter) {
-            $parameters[$parameter->getName()] = $parameter->getValue();
+            $parameters[$parameter->getName()] = $parameter->getData();
         }
         
         return $parameters;
