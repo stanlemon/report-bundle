@@ -24,7 +24,7 @@ class Executor
         return $this;
     }
 
-    public function execute() 
+    public function execute($values = array()) 
     {
         $this->start = microtime(true);
         
@@ -37,7 +37,7 @@ class Executor
         );
         
         foreach ($this->queryRenderer->getParameters() as $parameter) {
-            $stmt->bindValue($parameter->getName(), $parameter->getValue());
+            $stmt->bindValue($parameter->getName(), $values[$parameter->getName()]);
         }
         
         $stmt->execute();

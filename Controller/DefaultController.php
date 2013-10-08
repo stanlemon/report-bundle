@@ -71,7 +71,7 @@ class DefaultController extends Controller
         $form->handleRequest();
 
         $results = $this->reportExecutor->setReport($report)
-            ->execute();
+            ->execute($form->getData());
 
         $columnBuilder = new ColumnBuilder($results);
         $columns = $columnBuilder->build();
