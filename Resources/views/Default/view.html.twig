@@ -51,7 +51,7 @@
     </div>
 
     {% if report.parameters is not empty %}
-    <form method="post" {{ form_enctype(form) }}>
+    <form method="post" action="{{path('report_view_page', { id: report.id })}}" {{ form_enctype(form) }}>
         <div class="row">
         {{form_widget(form)}}
     </div>

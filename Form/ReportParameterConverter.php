@@ -24,11 +24,11 @@ class ReportParameterConverter
         $this->logger = $logger;
     }
 
-    public function createFormBuilder()
+    public function createFormBuilder($data = array())
     {
         $formFactory = Forms::createFormFactory();
 
-        $formBuilder = $formFactory->createNamedBuilder($this->formName);
+        $formBuilder = $formFactory->createNamedBuilder($this->formName, 'form', $data);
 
         foreach ($this->report->getParameters() as $parameter) {
             $options = $this->buildOptions($parameter);
@@ -69,6 +69,7 @@ class ReportParameterConverter
                 'choices' => $values,
             ));
 
+            $parameter->setData(null);
             $parameter->setType('choice');
         }
 

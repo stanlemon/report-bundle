@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Psr\Log\LoggerInterface;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Exception\NotValidCurrentPageException;
 
 use Lemon\ReportBundle\Report\Executor;
 use Lemon\ReportBundle\Report\ColumnBuilder;
@@ -63,12 +64,23 @@ class DefaultController extends Controller
             $this->logger
         );
 
-        $formBuilder = $converter->createFormBuilder();
+        $formBuilder = $converter->createFormBuilder($request->getSession()->get('report_' . $report->getSlug()));
         $formBuilder->setMethod($request->getMethod());
 
         $form = $formBuilder->getForm();
 
+        if (!$request->isMethod('post')) {
+            $form->setData(
+                $request->getSession()->get('report_' . $report->getSlug())
+            );
+        }
+
         $form->handleRequest();
+
+        if ($request->isMethod('post') && $page == 1) {
+            $request->getSession()->set('report_' . $report->getSlug(), $form->getData());
+        }
+
 
         $results = $this->reportExecutor->setReport($report)
             ->execute($form->getData());
