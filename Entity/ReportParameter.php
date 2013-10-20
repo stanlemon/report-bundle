@@ -57,6 +57,13 @@ class ReportParameter
     private $type;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="constraints", type="json_array")
+     */
+    private $constraints;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created", type="datetime")
@@ -214,6 +221,18 @@ class ReportParameter
     public function getType()
     {
         return $this->type;
+    }
+
+    public function setConstraints($constraints)
+    {
+        $this->constraints = $constraints;
+
+        return $this;
+    }
+
+    public function getConstraints()
+    {
+        return $this->constraints;
     }
 
     /**

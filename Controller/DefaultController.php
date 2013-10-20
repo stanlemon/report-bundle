@@ -59,6 +59,7 @@ class DefaultController extends Controller
         }
 
         $converter = new ReportParameterConverter(
+            $this->get('form.factory'),
             $report, 
             $this->get('doctrine.dbal.default_connection'), 
             $this->logger
@@ -73,7 +74,7 @@ class DefaultController extends Controller
             $request->getSession()->get('report_' . $report->getSlug())
         );
 
-        $form->handleRequest();
+        $form->bind($request);
 
         if ($request->isMethod('post') && $page == 1) {
             $request->getSession()->set('report_' . $report->getSlug(), $form->getData());

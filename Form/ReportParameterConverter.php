@@ -1,7 +1,7 @@
 <?php
 namespace Lemon\ReportBundle\Form;
 
-use Symfony\Component\Form\Forms;
+use Symfony\Component\Form\FormFactory;
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
 use Lemon\ReportBundle\Entity\Report;
@@ -16,8 +16,9 @@ class ReportParameterConverter
     protected $logger;
     protected $formName;
 
-    public function __construct(Report $report, Connection $connection, LoggerInterface $logger = null, $formName = null)
+    public function __construct(FormFactory $formFactory, Report $report, Connection $connection, LoggerInterface $logger = null, $formName = null)
     {
+        $this->formFactory = $formFactory;
         $this->report = $report;
         $this->connection = $connection;
         $this->formName = $formName;
@@ -26,9 +27,9 @@ class ReportParameterConverter
 
     public function createFormBuilder($data = array())
     {
-        $formFactory = Forms::createFormFactory();
-
-        $formBuilder = $formFactory->createNamedBuilder($this->formName, 'form', $data);
+        $formBuilder = $this->formFactory->createNamedBuilder($this->formName, 'form', $data, array(
+            'csrf_protection' => false // TODO: This is only necessary on GET requests
+        ));
 
         foreach ($this->report->getParameters() as $parameter) {
             $options = $this->buildOptions($parameter);
@@ -80,6 +81,30 @@ class ReportParameterConverter
 
         $options = array_merge($options, $serializer->normalize($parameter));
 
+        $this->handleConstraints($options);
+
         return $options;
+    }
+    
+    protected function handleConstraints(array &$options)
+    {
+        if (!isset($options['constraints']) || !is_array($options['constraints']) || empty($options['constraints'])) {
+            unset($options['constraints']); // Incase it's empty, just remove the option
+            return;
+        }
+
+        foreach ($options['constraints'] as $index => $constraint) {
+            // Do it this way rather than list() to prevent E_NOTICE for undefined vars
+            $class = current(array_slice($constraint, 0, 1));
+            $arguments = current(array_slice($constraint, 1, 1));
+
+            if (!class_exists('Symfony\Component\Validator\Constraints\\' . $class)) {
+                throw new \InvalidArgumentException(sprintf("Constraint class %s does not exist.", $class));
+            }
+
+            $class = 'Symfony\Component\Validator\Constraints\\' . $class;
+
+            $options['constraints'][$index] = new $class($arguments);
+        }
     }
 }

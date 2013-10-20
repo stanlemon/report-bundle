@@ -5,13 +5,22 @@
 {% form_theme form _self %}
 
 {% block form_row %}
-{% spaceless %}
-    <div class="span3">
-        {{ form_label(form) }}
-        {{ form_errors(form) }}
-        {{ form_widget(form) }}
-    </div>
-{% endspaceless %}
+    {% spaceless %}
+        {% if attr.class is not defined %}
+            {% set attr = attr|merge({'class': 'control-group'}) %}
+        {% endif %}
+        {% set attr = attr|merge({'class': (attr.class|default('') ~ ' span3')|trim}) %}
+        {% if errors|length > 0 %}
+            {% set attr = attr|merge({'class': (attr.class|default('') ~ ' error')|trim}) %}
+        {% endif %}
+        <div {{ block('widget_container_attributes') }}>
+            {{ form_label(form) }}
+            <div class="controls">
+                {{ form_widget(form) }}
+                {{ form_errors(form) }}
+            </div>
+        </div>
+    {% endspaceless %}
 {% endblock form_row %}
 
 {% block button_row %}
