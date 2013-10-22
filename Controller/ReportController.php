@@ -28,7 +28,7 @@ use Lemon\ReportBundle\Form\ReportParameterConverter;
 /**
  * @Route("/report", service="lemon_report.report_controller"))
  */
-class DefaultController
+class ReportController
 {
     protected $templating;
     protected $formFactory;
