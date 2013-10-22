@@ -51,16 +51,16 @@
         <div class="span4 text-right">
             <div class="btn-toolbar">
                 <div class="btn-group">
-                    <a class="btn btn-small" href="{{path('report_view', { id: report.id, _format: 'csv' })}}"><i class="icon-download-alt"></i> CSV</a>
-                    <a class="btn btn-small" href="{{path('report_view', { id: report.id, _format: 'json' })}}">JSON</a>
-                    <a class="btn btn-small" href="{{path('report_view', { id: report.id, _format: 'xml' })}}">XML</a>
+                    <a class="btn btn-small" href="{{path('lemon_report_view', { id: report.id, _format: 'csv' })}}"><i class="icon-download-alt"></i> CSV</a>
+                    <a class="btn btn-small" href="{{path('lemon_report_view', { id: report.id, _format: 'json' })}}">JSON</a>
+                    <a class="btn btn-small" href="{{path('lemon_report_view', { id: report.id, _format: 'xml' })}}">XML</a>
                 </div>
             </div>
         </div>
     </div>
 
     {% if report.parameters is not empty %}
-    <form method="post" action="{{path('report_view_page', { id: report.id })}}" {{ form_enctype(form) }}>
+    <form method="post" action="{{path('lemon_report_view_page', { id: report.id })}}" {{ form_enctype(form) }}>
         <div class="row">
         {{form_widget(form)}}
     </div>

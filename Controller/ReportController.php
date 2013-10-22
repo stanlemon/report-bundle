@@ -39,7 +39,7 @@ class ReportController
     protected $reportLoader;
 
     /**
-     * @Route("/", name="report_list")
+     * @Route("/", name="lemon_report_list")
      * @Template()
      */
     public function listAction()
@@ -52,8 +52,8 @@ class ReportController
     }
 
     /**
-     * @Route("/view/{id}/{page}", name="report_view_page")
-     * @Route("/view/{id}.{_format}", name="report_view", defaults={"_format" = "html"})
+     * @Route("/view/{id}/{page}", name="lemon_report_view_page")
+     * @Route("/view/{id}.{_format}", name="lemon_report_view", defaults={"_format" = "html"})
      */
     public function viewAction(Request $request, $id, $page = 1)
     {

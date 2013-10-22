@@ -15,7 +15,7 @@
             {% for report in reports %}
             <tr>
                 <td class="report-name">
-                    <a href="{{path('report_view', {id: report.id })}}">
+                    <a href="{{path('lemon_report_view', {id: report.id })}}">
                         {{report.name}}
                     </a>
                 </td>

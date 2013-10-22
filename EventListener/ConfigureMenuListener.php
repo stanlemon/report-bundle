@@ -9,6 +9,8 @@ class ConfigureMenuListener
     {
         $menu = $event->getMenu();
 
-        $menu->addChild('My Reports', array('route' => 'report_list'));
+        $menu->addChild('My Reports', array(
+            'route' => 'lemon_report_list'
+        ));
     }
 }
