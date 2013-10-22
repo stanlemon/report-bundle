@@ -4,11 +4,13 @@ namespace Lemon\ReportBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationRequestHandler;
+use Symfony\Component\Templating\EngineInterface as Templating;
+use Symfony\Component\Form\FormFactory;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -26,8 +28,11 @@ use Lemon\ReportBundle\Form\ReportParameterConverter;
 /**
  * @Route("/report", service="lemon_report.report_controller"))
  */
-class DefaultController extends Controller
+class DefaultController
 {
+    protected $templating;
+    protected $formFactory;
+    protected $connection;
     protected $logger;
     protected $serializer;
     protected $reportExecutor;
@@ -52,16 +57,14 @@ class DefaultController extends Controller
      */
     public function viewAction(Request $request, $id, $page = 1)
     {
-        $report = $this->reportLoader->findById($id);
-
-        if (null === $report) {
+        if (!($report = $this->reportLoader->findById($id))) {
             throw new NotFoundHttpException("Report does not exist!");
         }
 
         $converter = new ReportParameterConverter(
-            $this->get('form.factory'),
+            $this->formFactory,
             $report, 
-            $this->get('doctrine.dbal.default_connection'), 
+            $this->connection, 
             $this->logger
         );
 
@@ -120,13 +123,16 @@ class DefaultController extends Controller
                     throw new NotFoundHttpException();
                 }
 
-                return $this->render('LemonReportBundle:Default:view.html.twig', array(
-                    'pager'     => $pagerfanta,
-                    'report'    => $report,
-                    'form'      => $form->createView(),
-                    'query'     => \SqlFormatter::format($this->reportExecutor->getQuery()),
-                    'columns'   => $columns,
-                    'results'   => $results,
+                return new Response($this->templating->render(
+                    'LemonReportBundle:Default:view.html.twig', 
+                    array(
+                        'pager'     => $pagerfanta,
+                        'report'    => $report,
+                        'form'      => $form->createView(),
+                        'query'     => \SqlFormatter::format($this->reportExecutor->getQuery()),
+                        'columns'   => $columns,
+                        'results'   => $results,
+                    )
                 ));
         }
     }
@@ -140,6 +146,24 @@ class DefaultController extends Controller
     public function setReportLoader(LoaderInterface $reportLoader)
     {
         $this->reportLoader = $reportLoader;
+        return $this;
+    }
+
+    public function setConnection(Connection $connection)
+    {
+        $this->connection = $connection;
+        return $this;
+    }
+
+    public function setFormFactory(FormFactory $formFactory)
+    {
+        $this->formFactory = $formFactory;
+        return $this;
+    }
+
+    public function setTemplating(Templating $templating)
+    {
+        $this->templating = $templating;
         return $this;
     }
 

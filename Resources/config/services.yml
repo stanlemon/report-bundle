@@ -40,7 +40,9 @@ services:
         class: "Lemon\\ReportBundle\\Controller\\DefaultController"
         shared: true
         calls:
-            - [ setContainer, ["@service_container"] ]
+            - [ setConnection, [@doctrine.dbal.default_connection] ]
+            - [ setTemplating, ["@templating"] ]
+            - [ setFormFactory, ["@form.factory"] ]
             - [ setReportLoader, ["@lemon_report.report_loader"] ]
             - [ setReportExecutor, ["@lemon_report.report_executor"] ]
             - [ setLogger, ["@logger"] ]
