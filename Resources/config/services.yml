@@ -46,3 +46,11 @@ services:
             - [ setReportLoader, ["@lemon_report.report_loader"] ]
             - [ setReportExecutor, ["@lemon_report.report_executor"] ]
             - [ setLogger, ["@logger"] ]
+            - [ setReportParameterConverter, ["@lemon_report.form_report_parameter_converter"] ]
+
+    lemon_report.form_report_parameter_converter: 
+        class: "Lemon\\ReportBundle\\Form\\ReportParameterConverter"
+        calls:
+            - [ setConnection, [@doctrine.dbal.default_connection] ]
+            - [ setFormFactory, ["@form.factory"] ]
+            - [ setLogger, ["@logger"] ]

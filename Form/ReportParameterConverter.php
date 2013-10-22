@@ -11,27 +11,26 @@ class ReportParameterConverter
 {
     const PARAM_TYPE_QUERY = 'query';
 
-    protected $report;
-    protected $connections;
+    protected $connection;
+    protected $formFactory;
     protected $logger;
-    protected $formName;
 
-    public function __construct(FormFactory $formFactory, Report $report, Connection $connection, LoggerInterface $logger = null, $formName = null)
+    public function __construct()
     {
-        $this->formFactory = $formFactory;
-        $this->report = $report;
-        $this->connection = $connection;
-        $this->formName = $formName;
-        $this->logger = $logger;
     }
 
-    public function createFormBuilder($data = array())
+    public function createFormBuilder(Report $report, $data = array())
     {
-        $formBuilder = $this->formFactory->createNamedBuilder($this->formName, 'form', $data, array(
+        return $this->createNamedFormBuilder(null, $report, $data);
+    }
+
+    public function createNamedFormBuilder($formName = null, Report $report, $data = array())
+    {
+        $formBuilder = $this->formFactory->createNamedBuilder($formName, 'form', $data, array(
             'csrf_protection' => false // TODO: This is only necessary on GET requests
         ));
 
-        foreach ($this->report->getParameters() as $parameter) {
+        foreach ($report->getParameters() as $parameter) {
             $options = $this->buildOptions($parameter);
 
             $formBuilder->add($parameter->getName(), $parameter->getType(), $options);
@@ -107,4 +106,23 @@ class ReportParameterConverter
             $options['constraints'][$index] = new $class($arguments);
         }
     }
+
+    public function setConnection(Connection $connection)
+    {
+        $this->connection = $connection;
+        return $this;
+    }
+
+    public function setFormFactory(FormFactory $formFactory)
+    {
+        $this->formFactory = $formFactory;
+        return $this;
+    }
+
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+        return $this;
+    }
+
 }

@@ -61,14 +61,10 @@ class ReportController
             throw new NotFoundHttpException("Report does not exist!");
         }
 
-        $converter = new ReportParameterConverter(
-            $this->formFactory,
-            $report, 
-            $this->connection, 
-            $this->logger
+        $formBuilder = $this->reportParameterConverter->createFormBuilder(
+            $report,
+            $request->getSession()->get('report_' . $report->getSlug())
         );
-
-        $formBuilder = $converter->createFormBuilder($request->getSession()->get('report_' . $report->getSlug()));
         $formBuilder->setMethod($request->getMethod());
 
         $form = $formBuilder->getForm();
@@ -82,7 +78,6 @@ class ReportController
         if ($request->isMethod('post') && $page == 1) {
             $request->getSession()->set('report_' . $report->getSlug(), $form->getData());
         }
-
 
         $results = $this->reportExecutor->setReport($report)
             ->execute($form->getData());
@@ -146,6 +141,12 @@ class ReportController
     public function setReportLoader(LoaderInterface $reportLoader)
     {
         $this->reportLoader = $reportLoader;
+        return $this;
+    }
+
+    public function setReportParameterConverter(ReportParameterConverter $reportParameterConverter)
+    {
+        $this->reportParameterConverter = $reportParameterConverter;
         return $this;
     }
 
