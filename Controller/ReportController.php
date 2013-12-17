@@ -46,9 +46,12 @@ class ReportController
     {
         $reports = $this->reportLoader->findAll();
 
-        return array(
-            'reports'   => $reports,
-        );
+        return new Response($this->templating->render(
+            'LemonReportBundle:Default:list.html.twig', 
+            array(
+                'reports'   => $reports,
+            )
+        ));
     }
 
     /**
