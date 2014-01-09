@@ -30,16 +30,31 @@ class Executor
         
         //SqlFormatter::splitQuery() @todo
 
-        $this->queryRenderer->render($this->report);
+        $this->queryRenderer->render($this->report, $values);
 
-        $stmt = $this->connection->prepare(
-            $this->queryRenderer->getQuery()
-        );
-        
+        $query = $this->queryRenderer->getQuery();
+
+        $stmt = $this->connection->prepare($query);
+
+        $requirements = true;
+
         foreach ($this->queryRenderer->getParameters() as $parameter) {
-            $stmt->bindValue($parameter->getName(), $values[$parameter->getName()]);
+            $value = (isset($values[$parameter->getName()])) ?
+                $values[$parameter->getName()] : null;
+
+            if ($parameter->getRequired() && empty($value)) {
+                $requirements = false;
+            }
+
+            if (strpos($query, ':' . $parameter->getName()) !== false) {
+                $stmt->bindValue($parameter->getName(), $value);
+            }
         }
-        
+
+        if (!$requirements) {
+            return array();
+        }
+
         $stmt->execute();
 
         $results = $stmt->fetchAll(\PDO::FETCH_ASSOC);

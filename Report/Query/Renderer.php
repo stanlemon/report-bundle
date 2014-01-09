@@ -7,14 +7,14 @@ use Lemon\ReportBundle\Entity\Report;
 
 class Renderer
 {
-    public function render($report)
+    public function render($report, $values = array())
     {
         $this->report = $report;
 
         try {
             $this->query = $this->twig->render(
                 $this->report->getQuery(),
-                $this->report->getParameterArray()
+                array_merge($this->report->getParameterArray(), $values)
             );
             
             return $this->query;
@@ -27,18 +27,13 @@ class Renderer
     {
         return $this->query;
     }
-    
+
+    /**
+     * @todo Can this be removed?
+     */
     public function getParameters()
     {
-        $parameters = array();
-        
-        foreach ($this->report->getParameters() as $parameter) {
-            if (strpos($this->query, ':' . $parameter->getName()) !== false) {
-                $parameters[] = $parameter;
-            }
-        }
-        
-        return $parameters;
+        return $this->report->getParameters();
     }
 
     public function setTwig($twig)

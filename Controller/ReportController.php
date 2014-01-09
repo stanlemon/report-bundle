@@ -64,9 +64,11 @@ class ReportController
             throw new NotFoundHttpException("Report does not exist!");
         }
 
+        $format = $request->getRequestFormat();
+
         $formBuilder = $this->reportParameterConverter->createFormBuilder(
             $report,
-            $request->getSession()->get('report_' . $report->getSlug())
+            $request->getSession()->get('report_' . $report->getSlug()) ?: array()
         );
         $formBuilder->setMethod($request->getMethod());
 
@@ -76,19 +78,24 @@ class ReportController
             $request->getSession()->get('report_' . $report->getSlug())
         );
 
-        $form->bind($request);
+        if ($request->isMethod('post') || $format != 'html') {
+            $form->bind($request);
+        }
 
         if ($request->isMethod('post') && $page == 1) {
             $request->getSession()->set('report_' . $report->getSlug(), $form->getData());
         }
 
-        $results = $this->reportExecutor->setReport($report)
-            ->execute($form->getData());
+        try {
+            $results = $this->reportExecutor->setReport($report)
+                ->execute($form->getData());
+        } catch (\Exception $e) {
+            $request->getSession()->set('report_' . $report->getSlug(), array());
+            throw $e;
+        }
 
         $columnBuilder = new ColumnBuilder($results);
         $columns = $columnBuilder->build();
-
-        $format = $request->getRequestFormat();
 
         switch ($format) {
             case 'csv':

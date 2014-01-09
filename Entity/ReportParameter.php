@@ -12,6 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ReportParameter
 {
+    const TYPE_QUERY = 'query';
+    const TYPE_CHOICE = 'choice';
+
+    
     /**
      * @var integer
      *
@@ -48,6 +52,13 @@ class ReportParameter
      * @ORM\Column(name="data", type="string", length=255, nullable=true)
      */
     private $data;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="choices", type="string", length=2096, nullable=true)
+     */
+    private $choices;
 
     /**
      * @var string
@@ -198,6 +209,33 @@ class ReportParameter
     public function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * Set choices
+     *
+     * @param string $choices
+     * @return ReportParameter
+     */
+    public function setChoices($choices)
+    {
+        $this->choices = $choices;
+    
+        return $this;
+    }
+
+    /**
+     * Get choices
+     *
+     * @return string 
+     */
+    public function getChoices()
+    {
+        if ($this->getType() != self::TYPE_QUERY) {
+            return json_decode($this->choices);
+        } else {
+            return $this->choices;
+        }
     }
 
     /**

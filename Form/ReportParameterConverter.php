@@ -9,8 +9,6 @@ use Lemon\ReportBundle\Entity\ReportParameter;
 
 class ReportParameterConverter 
 {
-    const PARAM_TYPE_QUERY = 'query';
-
     protected $connection;
     protected $formFactory;
     protected $logger;
@@ -33,6 +31,10 @@ class ReportParameterConverter
         foreach ($report->getParameters() as $parameter) {
             $options = $this->buildOptions($parameter);
 
+            if (isset($data[$parameter->getName()])) {
+                $options['data'] = $data[$parameter->getName()];
+            }
+
             $formBuilder->add($parameter->getName(), $parameter->getType(), $options);
         }
 
@@ -49,13 +51,13 @@ class ReportParameterConverter
     {
         $options = array();
 
-        if ($parameter->getType() == self::PARAM_TYPE_QUERY) {
-            $stmt = $this->connection->prepare($parameter->getData());
+        if ($parameter->getType() == ReportParameter::TYPE_QUERY) {
+            $stmt = $this->connection->prepare($parameter->getChoices());
             $stmt->execute();
-            
+
             $results = $stmt->fetchAll();
 
-            $values = array();
+            $values = array(null => '');
 
             $keySet = array_keys(current($results));
             $key = current(array_slice($keySet, 0, 1));
@@ -69,7 +71,6 @@ class ReportParameterConverter
                 'choices' => $values,
             ));
 
-            $parameter->setData(null);
             $parameter->setType('choice');
         }
 
@@ -78,7 +79,13 @@ class ReportParameterConverter
 
         $serializer = new \Symfony\Component\Serializer\Serializer(array($normalizer));
 
-        $options = array_merge($options, $serializer->normalize($parameter));
+        $options = array_merge($serializer->normalize($parameter), $options);
+
+        foreach ($options as $key => $value) {
+            if (is_null($value)) {
+                unset($options[$key]);
+            }
+        }
 
         $this->handleConstraints($options);
 
