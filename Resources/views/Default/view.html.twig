@@ -1,4 +1,4 @@
-{% extends 'LemonReportBundle::layout.html.twig' %}
+{% extends '@LemonReport/layout.html.twig' %}
 
 {% block title report.name %}
 
@@ -51,9 +51,9 @@
         <div class="span4 text-right">
             <div class="btn-toolbar">
                 <div class="btn-group">
-                    <a class="btn btn-small" href="{{path('lemon_report_view', { id: report.id, _format: 'csv' })}}"><i class="icon-download-alt"></i> CSV</a>
-                    <a class="btn btn-small" href="{{path('lemon_report_view', { id: report.id, _format: 'json' })}}">JSON</a>
-                    <a class="btn btn-small" href="{{path('lemon_report_view', { id: report.id, _format: 'xml' })}}">XML</a>
+                    <a class="btn btn-small" href="{{path('lemon_report_csv', { id: report.id })}}"><i class="icon-download-alt"></i> CSV</a>
+                    <a class="btn btn-small" href="{{path('lemon_report_json', { id: report.id })}}">JSON</a>
+                    <a class="btn btn-small" href="{{path('lemon_report_xml', { id: report.id })}}">XML</a>
                 </div>
             </div>
         </div>
@@ -67,9 +67,9 @@
     </form>
     {% endif %}
 
-    <h4>{{pager.nbResults}} Results found</h4>
+    <h4>{{total}} Results found</h4>
 
-    {% if pager.currentPageResults|length > 0 %}
+    {% if results|length > 0 %}
     <table class="table table-hover table-bordered table-condensed table-unseen-col">
         <thead>
             <tr>
@@ -79,7 +79,7 @@
             </tr>
         </thead>
         <tbody>
-        {% for result in pager.currentPageResults %}
+        {% for result in results %}
             <tr>
             {% for key, value in result %}
                 <td>{{value}}</td>
@@ -92,9 +92,7 @@
     <div class="well">{% trans %}There are no results for this report.{% endtrans %}</div>
     {% endif %}
 
-    <div class="pagerfanta">
-        {{ pagerfanta(pager, 'twitter_bootstrap') }}
-    </div>
+    {{ pager|raw }}
 
     {% if app.debug %}
         <h4>Query</h4>

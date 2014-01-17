@@ -36,7 +36,7 @@ class Renderer
         return $this->report->getParameters();
     }
 
-    public function setTwig($twig)
+    public function setTwig(\Twig_Environment $twig)
     {
         $this->twig = $twig;
     }

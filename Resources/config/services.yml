@@ -10,11 +10,6 @@ services:
         tags:
             - { name: twig.loader }
 
-    lemon_report.configure_menu_listener:
-        class: Lemon\ReportBundle\EventListener\ConfigureMenuListener
-        tags:
-          - { name: kernel.event_listener, event: lemon_bootstrap.menu_configure, method: onMenuConfigure }
-
     lemon_report.query_renderer:
         class: "Lemon\\ReportBundle\\Report\\Query\\Renderer"
         calls:
@@ -41,10 +36,11 @@ services:
         shared: true
         calls:
             - [ setConnection, [@doctrine.dbal.default_connection] ]
-            - [ setTemplating, ["@templating"] ]
+            - [ setTwig, ["@twig"] ]
             - [ setFormFactory, ["@form.factory"] ]
             - [ setReportLoader, ["@lemon_report.report_loader"] ]
             - [ setReportExecutor, ["@lemon_report.report_executor"] ]
+            - [ setRouter, ["@router"] ]
             - [ setLogger, ["@logger"] ]
             - [ setReportParameterConverter, ["@lemon_report.form_report_parameter_converter"] ]
 
