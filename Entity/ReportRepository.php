@@ -52,6 +52,7 @@ class ReportRepository extends EntityRepository implements LoaderInterface
             ->from('Lemon\ReportBundle\Entity\Report', 'r')
             ->leftJoin('r.parameters', 'rp', 'WITH', 'rp.active = true')
             ->where('r.active = true')
+            ->orderBy('r.name')
         ;
 
         $query = $qb->getQuery();

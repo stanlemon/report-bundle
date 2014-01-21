@@ -60,22 +60,17 @@ class ReportController
             throw new NotFoundHttpException("Report does not exist!");
         }
 
-        $format = $request->getRequestFormat();
-
         $formBuilder = $this->reportParameterConverter->createFormBuilder(
             $report,
             $request->getSession()->get('report_' . $report->getSlug()) ?: array()
         );
-        $formBuilder->setMethod($request->getMethod());
 
         $form = $formBuilder->getForm();
 
-        $form->setData(
-            $request->getSession()->get('report_' . $report->getSlug())
-        );
-
-        if ($request->isMethod('post') || $format != 'html') {
+        if ($request->isMethod('post')) {
             $form->bind($request);
+
+            $request->getSession()->set('report_' . $report->getSlug(), $form->getData());
         }
 
         try {
@@ -132,10 +127,6 @@ class ReportController
     public function viewAction(Request $request, $id, $page = 1)
     {
         list($report, $results, $form) = $this->loadReport($request, $id);
-
-        if ($request->isMethod('post') && $page == 1) {
-            $request->getSession()->set('report_' . $report->getSlug(), $form->getData());
-        }
 
         $adapter = new ArrayAdapter($results);
 
