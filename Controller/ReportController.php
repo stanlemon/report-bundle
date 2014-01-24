@@ -148,8 +148,9 @@ class ReportController
         $columns = $columnBuilder->build();
 
         $view = new PagerView();
-        $pager = $view->render($pagerfanta, function($page) use($id) {
-            return $this->router->generate('lemon_report_view_page', array('page' => $page, 'id' => $id));
+        $router = $this->router;
+        $pager = $view->render($pagerfanta, function($page) use($id, $router) {
+            return $router->generate('lemon_report_view_page', array('page' => $page, 'id' => $id));
         }, array('proximity' => 3));
 
         return new Response($this->twig->render(
