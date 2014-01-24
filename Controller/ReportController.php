@@ -38,9 +38,8 @@ class ReportController
     protected $router;
     protected $reportExecutor;
     protected $reportLoader;
-    
-    
     protected $reportEngine;
+    protected $debug;
 
     /**
      * @Route("/", name="lemon_report_list")
@@ -156,6 +155,7 @@ class ReportController
         return new Response($this->twig->render(
             '@LemonReport/Default/view.html.twig', 
             array(
+                'debug'     => $request->query->get('debug') != null ? $request->query->get('debug') : $this->debug,
                 'pager'     => $pager,
                 'total'     => $pagerfanta->getNbResults(),
                 'results'   => $pagerfanta->getCurrentPageResults(),
@@ -214,11 +214,16 @@ class ReportController
         $this->logger = $logger;
         return $this;
     }
-    
-    
-    
+
     public function setReportEngine($reportEngine)
     {
         $this->reportEngine = $reportEngine;
+        return $this;
+    }
+    
+    public function setDebug($debug)
+    {
+        $this->debug = $debug;
+        return $this;
     }
 }

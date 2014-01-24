@@ -61,6 +61,7 @@ services:
             - [ setLogger, ["@logger"] ]
             - [ setReportParameterConverter, ["@lemon_report.form_report_parameter_converter"] ]
             - [ setReportEngine, ["@lemon_report.report_engine"] ]
+            - [ setDebug, ['%kernel.debug%'] ]
 
     lemon_report.form_report_parameter_converter: 
         class: "Lemon\\ReportBundle\\Form\\ReportParameterConverter"
