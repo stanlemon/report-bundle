@@ -80,7 +80,7 @@ class ReportController
                 ->results()
             ;
 
-            return [$report, $results, $form];
+            return array($report, $results, $form);
         } catch (ReportException $e) {
             throw new NotFoundHttpException("Report not found!");
         } catch (\Exception $e) {
@@ -149,8 +149,8 @@ class ReportController
 
         $view = new PagerView();
         $pager = $view->render($pagerfanta, function($page) use($id) {
-            return $this->router->generate('lemon_report_view_page', ['page' => $page, 'id' => $id]);
-        }, ['proximity' => 3]);
+            return $this->router->generate('lemon_report_view_page', array('page' => $page, 'id' => $id));
+        }, array('proximity' => 3));
 
         return new Response($this->twig->render(
             '@LemonReport/Default/view.html.twig', 
