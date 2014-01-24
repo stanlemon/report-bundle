@@ -1,7 +1,7 @@
 <?php
 namespace Lemon\ReportBundle\Report\Loader;
 
-interface LoaderInterface {
+interface RepositoryInterface {
     
     public function findById($id);
 

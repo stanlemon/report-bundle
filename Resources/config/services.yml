@@ -10,6 +10,23 @@ services:
         tags:
             - { name: twig.loader }
 
+    lemon_report.report_engine:
+        class: "Lemon\\ReportBundle\\Report\\Engine"
+        calls:
+            - [ setRepository, ["@lemon_report.orm_repository"] ]
+            - [ setExecutor, ["@lemon_report.report_executor"] ]
+            - [ setLogger, ["@logger"] ]
+
+    lemon_report.orm_repository:
+        class: "Lemon\\ReportBundle\\Report\\Loader\\OrmRepository"
+        factory_service: doctrine
+        factory_method: getRepository
+        arguments:
+            - "Lemon\\ReportBundle\\Entity\\Report"
+        calls:
+            - [ setLogger, ["@logger"] ]
+
+
     lemon_report.query_renderer:
         class: "Lemon\\ReportBundle\\Report\\Query\\Renderer"
         calls:
@@ -43,6 +60,7 @@ services:
             - [ setRouter, ["@router"] ]
             - [ setLogger, ["@logger"] ]
             - [ setReportParameterConverter, ["@lemon_report.form_report_parameter_converter"] ]
+            - [ setReportEngine, ["@lemon_report.report_engine"] ]
 
     lemon_report.form_report_parameter_converter: 
         class: "Lemon\\ReportBundle\\Form\\ReportParameterConverter"

@@ -4,6 +4,7 @@ namespace Lemon\ReportBundle\Report\Query;
 use Psr\Log\LoggerInterface;
 use Doctrine\DBAL\Connection;
 use Lemon\ReportBundle\Entity\Report;
+use Lemon\ReportBundle\Report\Query\Renderer\Exception;
 
 class Renderer
 {

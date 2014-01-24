@@ -18,12 +18,12 @@ use Pagerfanta\View\TwitterBootstrapView as PagerView;
 
 use Lemon\ReportBundle\Report\Executor;
 use Lemon\ReportBundle\Report\ColumnBuilder;
-use Lemon\ReportBundle\Report\Loader\LoaderInterface;
+use Lemon\ReportBundle\Report\Loader\RepositoryInterface;
 use Lemon\ReportBundle\Report\Output\Csv;
 use Lemon\ReportBundle\Report\Output\Json;
 use Lemon\ReportBundle\Report\Output\Xml;
 use Lemon\ReportBundle\Form\ReportParameterConverter;
-
+use Lemon\ReportBundle\Report\Exception as ReportException;
 
 /**
  * @Route("/report", service="lemon_report.report_controller"))
@@ -38,6 +38,9 @@ class ReportController
     protected $router;
     protected $reportExecutor;
     protected $reportLoader;
+    
+    
+    protected $reportEngine;
 
     /**
      * @Route("/", name="lemon_report_list")
@@ -56,32 +59,35 @@ class ReportController
 
     protected function loadReport(Request $request, $id)
     {
-        if (!($report = $this->reportLoader->findById($id))) {
-            throw new NotFoundHttpException("Report does not exist!");
-        }
-
-        $formBuilder = $this->reportParameterConverter->createFormBuilder(
-            $report,
-            $request->getSession()->get('report_' . $report->getSlug()) ?: array()
-        );
-
-        $form = $formBuilder->getForm();
-
-        if ($request->isMethod('post')) {
-            $form->bind($request);
-
-            $request->getSession()->set('report_' . $report->getSlug(), $form->getData());
-        }
-
         try {
-            $results = $this->reportExecutor->setReport($report)
-                ->execute($form->getData());
+            $report = $this->reportEngine->load($id);
+
+            $formBuilder = $this->reportParameterConverter->createFormBuilder(
+                $report,
+                $request->getSession()->get('report_' . $report->getSlug()) ?: array()
+            );
+
+            $form = $formBuilder->getForm();
+
+            if ($request->isMethod('post')) {
+                $form->bind($request);
+
+                $request->getSession()->set('report_' . $report->getSlug(), $form->getData());
+            }
+
+            $results = $this->reportEngine
+                ->with($form->getData())
+                ->run()
+                ->results()
+            ;
+
+            return [$report, $results, $form];
+        } catch (ReportException $e) {
+            throw new NotFoundHttpException("Report not found!");
         } catch (\Exception $e) {
             $request->getSession()->set('report_' . $report->getSlug(), array());
             throw $e;
         }
-
-        return [$report, $results, $form];
     }
 
     protected function reportAction($type, Request $request, $id)
@@ -167,7 +173,7 @@ class ReportController
         return $this;
     }
 
-    public function setReportLoader(LoaderInterface $reportLoader)
+    public function setReportLoader(RepositoryInterface $reportLoader)
     {
         $this->reportLoader = $reportLoader;
         return $this;
@@ -207,5 +213,12 @@ class ReportController
     {
         $this->logger = $logger;
         return $this;
+    }
+    
+    
+    
+    public function setReportEngine($reportEngine)
+    {
+        $this->reportEngine = $reportEngine;
     }
 }

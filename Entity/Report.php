@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Report
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Lemon\ReportBundle\Entity\ReportRepository")
+ * @ORM\Entity(repositoryClass="Lemon\ReportBundle\Report\Loader\OrmRepository")
  */
 class Report
 {
