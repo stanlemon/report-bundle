@@ -30,7 +30,7 @@ class EmailReportCommand extends ContainerAwareCommand
             ->addOption('report', 'r', InputOption::VALUE_REQUIRED, 'Report to run the results for')
             ->addOption('from', 'f', InputOption::VALUE_REQUIRED, 'Email address to send the report from')
             ->addOption('to', 't', InputOption::VALUE_REQUIRED, 'Email address to send the report to')
-            ->addOption('param', 'p', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Parameters to be utilized for the report', [])
+            ->addOption('param', 'p', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Parameters to be utilized for the report', array())
         ;
     }
 
