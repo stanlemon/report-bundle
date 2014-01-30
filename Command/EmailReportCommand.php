@@ -30,7 +30,7 @@ class EmailReportCommand extends ContainerAwareCommand
             ->addOption('report', 'r', InputOption::VALUE_REQUIRED, 'Report to run the results for')
             ->addOption('from', 'f', InputOption::VALUE_REQUIRED, 'Email address to send the report from')
             ->addOption('to', 't', InputOption::VALUE_REQUIRED, 'Email address to send the report to')
-            ->addOption('params', 'p', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Parameters to be utilized for the report', [])
+            ->addOption('param', 'p', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Parameters to be utilized for the report', [])
         ;
     }
 
@@ -43,11 +43,23 @@ class EmailReportCommand extends ContainerAwareCommand
         $this->report = $input->getOption('report');
         $this->from = $input->getOption('from');
         $this->to = $input->getOption('to');
-        $this->params = $input->getOption('params'); // @todo
+        $this->params = $this->buildParams($input->getOption('param'));
 
         $this->command();
     }
-    
+
+    public function buildParams($_params)
+    {
+        $params = array();
+
+        foreach ($_params as $param) {
+            list($key, $value) = explode('=', $param);
+            $params[$key] = $value;
+        }
+
+        return $params;
+    }
+
     protected function validate()
     {
         if (empty($this->report)) {
@@ -69,7 +81,7 @@ class EmailReportCommand extends ContainerAwareCommand
 
         $mailer = new ReportMailer($this->reportEngine, $this->mailer);
         $mailer
-            ->run($this->report)
+            ->run($this->report, $this->params)
             ->from($this->from)
             ->to($this->to)
             ->send()

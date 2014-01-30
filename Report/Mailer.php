@@ -7,20 +7,27 @@ use Lemon\ReportBundle\Report\Output\Csv;
 
 class Mailer 
 {
+    protected $engine;
+    protected $mailer;
+    protected $report;
+    protected $results;
+    protected $from;
+    protected $to;
+
     public function __construct(Engine $engine, Swift_Mailer $mailer)
     {
         $this->engine = $engine;
         $this->mailer = $mailer;
     }
 
-    public function run($reportId)
+    public function run($reportId, $params)
     {
         $this->report = $this->engine->load(
             $reportId
         );
 
         $this->results = $this->engine
-            ->with(array())
+            ->with($params)
             ->run()
             ->results()
         ;
