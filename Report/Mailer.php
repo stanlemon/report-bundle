@@ -13,6 +13,7 @@ class Mailer
     protected $results;
     protected $from;
     protected $to;
+    protected $subject;
 
     public function __construct(Engine $engine, Swift_Mailer $mailer)
     {
@@ -47,11 +48,23 @@ class Mailer
         return $this;
     }
 
+    public function subject($subject)
+    {
+        $this->subject = $subject;
+        return $this;
+    }
+
     public function send()
     {
+        if (is_null($this->subject)) {
+            $subject = $this->report->getName() . ' for ' . date('m/d/y');
+        } else {
+            $subject = $this->subject;
+        }
+
         $message = new \Swift_Message();
         $message
-            ->setSubject($this->report->getName() . ' for ' . date('m/d/y'))
+            ->setSubject($subject)
             ->setFrom($this->from)
             ->setTo($this->to)
             ->setBody("Your report \"{$this->report->getName()}\"  has been run and is attached to this email.")
