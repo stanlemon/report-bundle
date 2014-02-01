@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * ReportParameter
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Lemon\ReportBundle\Entity\ReportParameterRepository")
+ * @ORM\Entity()
  */
 class ReportParameter
 {
