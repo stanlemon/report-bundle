@@ -50,7 +50,6 @@ services:
 
     lemon_report.report_controller: 
         class: "Lemon\\ReportBundle\\Controller\\ReportController"
-        shared: true
         calls:
             - [ setConnection, [@doctrine.dbal.default_connection] ]
             - [ setTwig, ["@twig"] ]

@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationRequestHandler;
 use Symfony\Component\Form\FormFactory;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
 use Pagerfanta\Pagerfanta;
@@ -25,9 +24,6 @@ use Lemon\ReportBundle\Report\Output\Xml;
 use Lemon\ReportBundle\Form\ReportParameterConverter;
 use Lemon\ReportBundle\Report\Exception as ReportException;
 
-/**
- * @Route("/report", service="lemon_report.report_controller"))
- */
 class ReportController
 {
     protected $twig;
@@ -41,9 +37,6 @@ class ReportController
     protected $reportEngine;
     protected $debug;
 
-    /**
-     * @Route("/", name="lemon_report_list")
-     */
     public function listAction()
     {
         $reports = $this->reportLoader->findAll();
@@ -101,34 +94,21 @@ class ReportController
         return $response;
     }
 
-    /**
-     * @Route("/csv/{id}", name="lemon_report_csv")
-     */
     public function csvAction(Request $request, $id)
     {
         return $this->reportAction('csv', $request, $id);
     }
 
-    /**
-     * @Route("/json/{id}", name="lemon_report_json")
-     */
     public function jsonAction(Request $request, $id)
     {
         return $this->reportAction('json', $request, $id);
     }
 
-    /**
-     * @Route("/xml/{id}", name="lemon_report_xml")
-     */
     public function xmlAction(Request $request, $id)
     {
         return $this->reportAction('xml', $request, $id);
     }
 
-    /**
-     * @Route("/view/{id}", name="lemon_report_view")
-     * @Route("/view/{id}/{page}", name="lemon_report_view_page")
-     */
     public function viewAction(Request $request, $id, $page = 1)
     {
         list($report, $results, $form) = $this->loadReport($request, $id);

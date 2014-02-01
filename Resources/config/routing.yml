@@ -1,0 +1,24 @@
+
+lemon_report_list:
+    path: /
+    defaults: { _controller: lemon_report.report_controller:listAction }
+
+lemon_report_view:
+    path: /view/{id}
+    defaults: { _controller: lemon_report.report_controller:viewAction }
+
+lemon_report_view_page:
+    path: /view/{id}/{page}
+    defaults: { _controller: lemon_report.report_controller:viewAction }
+
+lemon_report_csv:
+    path: /csv/{id}
+    defaults: { _controller: lemon_report.report_controller:csvAction }
+    
+lemon_report_json:
+    path: /json/{id}
+    defaults: { _controller: lemon_report.report_controller:jsonAction }
+
+lemon_report_xml:
+    path: /xml/{id}
+    defaults: { _controller: lemon_report.report_controller:xmlAction }
