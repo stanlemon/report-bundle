@@ -12,16 +12,17 @@
         }
     ],
     "require": {
-        "php": ">=5.4",
-        "psr/log": ">=1.0",
-        "twig/twig": ">=1.0",
+        "php": ">=5.3.3",
+        "symfony/framework-bundle": ">=2.2",
+        "symfony/yaml": ">=2.2",
         "symfony/form": ">=2.2",
-        "doctrine/orm": ">=2.3",
-        "pagerfanta/pagerfanta": ">=1.0",
-        "jdorn/sql-formatter": ">=1.0",
-
         "symfony/http-foundation": ">=2.2",
-        "symfony/routing": ">=2.2"
+        "symfony/routing": ">=2.2",
+        "doctrine/orm": ">=2.3",
+        "twig/twig": ">=1.0",
+        "psr/log": ">=1.0",
+        "pagerfanta/pagerfanta": ">=1.0",
+        "jdorn/sql-formatter": ">=1.0"
     },
     "suggest": {
         "monolog/monolog": ">=1.0"
