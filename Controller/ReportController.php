@@ -12,13 +12,11 @@ use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Pagerfanta\View\TwitterBootstrapView as PagerView;
-
 use Lemon\ReportBundle\Report\Executor;
 use Lemon\ReportBundle\Report\ColumnBuilder;
 use Lemon\ReportBundle\Report\Loader\RepositoryInterface;
 use Lemon\ReportBundle\Form\ReportParameterConverter;
 use Lemon\ReportBundle\Report\Exception as ReportException;
-
 
 class ReportController
 {
@@ -39,7 +37,7 @@ class ReportController
         $reports = $this->reportLoader->findAll();
 
         return new Response($this->twig->render(
-            '@LemonReport/Default/list.html.twig', 
+            '@LemonReport/Default/list.html.twig',
             array(
                 'reports'   => $reports,
             )
@@ -126,12 +124,12 @@ class ReportController
 
         $view = new PagerView();
         $router = $this->router;
-        $pager = $view->render($pagerfanta, function($page) use($id, $router) {
+        $pager = $view->render($pagerfanta, function ($page) use ($id, $router) {
             return $router->generate('lemon_report_view_page', array('page' => $page, 'id' => $id));
         }, array('proximity' => 3));
 
         return new Response($this->twig->render(
-            '@LemonReport/Default/view.html.twig', 
+            '@LemonReport/Default/view.html.twig',
             array(
                 'debug'     => $request->query->get('debug') != null ? $request->query->get('debug') : $this->debug,
                 'pager'     => $pager,

@@ -64,20 +64,17 @@ class Report
      */
     private $modified;
 
-	/**
-	 * @ORM\OneToMany(targetEntity="ReportParameter", mappedBy="report", cascade={"persist"})
-	 * @ORM\JoinColumn(name="id", referencedColumnName="report_id")
-	 */
+    /**
+     * @ORM\OneToMany(targetEntity="ReportParameter", mappedBy="report", cascade={"persist"})
+     * @ORM\JoinColumn(name="id", referencedColumnName="report_id")
+     */
     private $parameters;
-
-
 
     public function __construct()
     {
         $this->created = new \DateTime();
         $this->modified = clone $this->created;
         $this->active = true;
-        
         $this->parameters = new ArrayCollection();
     }
 
@@ -229,7 +226,6 @@ class Report
         return $this->modified;
     }
 
-
     public function getParameters()
     {
         return $this->parameters;
@@ -247,7 +243,7 @@ class Report
         foreach ($this->getParameters() as $parameter) {
             $parameters[$parameter->getName()] = $parameter->getData();
         }
-        
+
         return $parameters;
     }
 }

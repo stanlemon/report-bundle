@@ -1,4 +1,6 @@
 <?php
 namespace Lemon\ReportBundle\Report;
 
-class Exception extends \Exception {} 
+class Exception extends \Exception
+{
+}

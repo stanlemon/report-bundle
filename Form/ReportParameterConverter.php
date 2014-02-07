@@ -7,7 +7,7 @@ use Psr\Log\LoggerInterface;
 use Lemon\ReportBundle\Entity\Report;
 use Lemon\ReportBundle\Entity\ReportParameter;
 
-class ReportParameterConverter 
+class ReportParameterConverter
 {
     protected $connection;
     protected $formFactory;
@@ -22,7 +22,7 @@ class ReportParameterConverter
         return $this->createNamedFormBuilder(null, $report, $data);
     }
 
-    public function createNamedFormBuilder($formName = null, Report $report, $data = array())
+    public function createNamedFormBuilder($formName, Report $report, $data = array())
     {
         $formBuilder = $this->formFactory->createNamedBuilder($formName, 'form', $data, array(
             'csrf_protection' => false
@@ -131,5 +131,4 @@ class ReportParameterConverter
         $this->logger = $logger;
         return $this;
     }
-
 }

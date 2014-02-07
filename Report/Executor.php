@@ -6,7 +6,7 @@ use Doctrine\DBAL\Connection;
 use Lemon\ReportBundle\Entity\Report;
 use Lemon\ReportBundle\Report\Query\Renderer as QueryRenderer;
 
-class Executor 
+class Executor
 {
     protected $logger;
     protected $connection;
@@ -15,7 +15,7 @@ class Executor
     protected $end;
     protected $report;
 
-    public function execute($values = array()) 
+    public function execute($values = array())
     {
         $this->start = microtime(true);
 

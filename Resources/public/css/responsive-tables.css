@@ -1,169 +1,169 @@
 /** Responsive Table Strategies
-	  taken from: http://elvery.net/demo/responsive-tables/ **/
+      taken from: http://elvery.net/demo/responsive-tables/ **/
 
 @media (max-width: 768px) {
 
-	/** Hide columns at the end of the row **/
+    /** Hide columns at the end of the row **/
 
-	.table-unseen-col th:nth-last-child(2),
-	.table-unseen-col td:nth-last-child(2),
+    .table-unseen-col th:nth-last-child(2),
+    .table-unseen-col td:nth-last-child(2),
 
-	.table-unseen-col th:nth-last-child(3),
-	.table-unseen-col td:nth-last-child(3),
+    .table-unseen-col th:nth-last-child(3),
+    .table-unseen-col td:nth-last-child(3),
 
-	.table-unseen-col th:nth-last-child(4),
-	.table-unseen-col td:nth-last-child(4),
+    .table-unseen-col th:nth-last-child(4),
+    .table-unseen-col td:nth-last-child(4),
 
-	.table-unseen-col th:nth-last-child(5),
-	.table-unseen-col td:nth-last-child(5),
+    .table-unseen-col th:nth-last-child(5),
+    .table-unseen-col td:nth-last-child(5),
 
-	.table-unseen-col th:nth-last-child(6),
-	.table-unseen-col td:nth-last-child(6),
+    .table-unseen-col th:nth-last-child(6),
+    .table-unseen-col td:nth-last-child(6),
 
-	.table-unseen-col th:nth-last-child(7),
-	.table-unseen-col td:nth-last-child(7),
+    .table-unseen-col th:nth-last-child(7),
+    .table-unseen-col td:nth-last-child(7),
 
-	.table-unseen-col th:nth-last-child(8),
-	.table-unseen-col td:nth-last-child(8),
+    .table-unseen-col th:nth-last-child(8),
+    .table-unseen-col td:nth-last-child(8),
 
-	.table-unseen-col th:nth-last-child(9),
-	.table-unseen-col td:nth-last-child(9),
+    .table-unseen-col th:nth-last-child(9),
+    .table-unseen-col td:nth-last-child(9),
 
-	.table-unseen-col th:nth-last-child(10),
-	.table-unseen-col td:nth-last-child(10),
+    .table-unseen-col th:nth-last-child(10),
+    .table-unseen-col td:nth-last-child(10),
 
-	.table-unseen-col th:nth-last-child(11),
-	.table-unseen-col td:nth-last-child(11),
+    .table-unseen-col th:nth-last-child(11),
+    .table-unseen-col td:nth-last-child(11),
 
-	.table-unseen-col th:nth-last-child(12),
-	.table-unseen-col td:nth-last-child(12),
+    .table-unseen-col th:nth-last-child(12),
+    .table-unseen-col td:nth-last-child(12),
 
-	.table-unseen-col th:nth-last-child(13),
-	.table-unseen-col td:nth-last-child(13),
+    .table-unseen-col th:nth-last-child(13),
+    .table-unseen-col td:nth-last-child(13),
 
-	.table-unseen-col th:nth-last-child(14),
-	.table-unseen-col td:nth-last-child(14),
+    .table-unseen-col th:nth-last-child(14),
+    .table-unseen-col td:nth-last-child(14),
 
-	.table-unseen-col th:nth-last-child(15),
-	.table-unseen-col td:nth-last-child(15),
+    .table-unseen-col th:nth-last-child(15),
+    .table-unseen-col td:nth-last-child(15),
 
-	.table-unseen-col th:nth-last-child(16),
-	.table-unseen-col td:nth-last-child(16),
+    .table-unseen-col th:nth-last-child(16),
+    .table-unseen-col td:nth-last-child(16),
 
-	.table-unseen-col th:nth-last-child(17),
-	.table-unseen-col td:nth-last-child(17),
+    .table-unseen-col th:nth-last-child(17),
+    .table-unseen-col td:nth-last-child(17),
 
-	.table-unseen-col th:nth-last-child(18),
-	.table-unseen-col td:nth-last-child(18),
+    .table-unseen-col th:nth-last-child(18),
+    .table-unseen-col td:nth-last-child(18),
 
-	.table-unseen-col th:nth-last-child(19),
-	.table-unseen-col td:nth-last-child(19),
+    .table-unseen-col th:nth-last-child(19),
+    .table-unseen-col td:nth-last-child(19),
 
-	.table-unseen-col th:nth-last-child(20),
-	.table-unseen-col td:nth-last-child(20)
+    .table-unseen-col th:nth-last-child(20),
+    .table-unseen-col td:nth-last-child(20)
 
-	{
-		display: none;
-	}
-
-
-	/** Always show the first two and the last column of the row **/
-
-	.table-unseen-col th:nth-child(1),
-	.table-unseen-col td:nth-child(1),
-
-	.table-unseen-col th:nth-child(2),
-	.table-unseen-col td:nth-child(2),
-
-	.table-unseen-col th:nth-last-child(1),
-	.table-unseen-col td:nth-last-child(1)
-
-	{
-		display: table-cell !important;
-	}
+    {
+        display: none;
+    }
 
 
-	/** In the last column, hide all buttons **/
+    /** Always show the first two and the last column of the row **/
 
-	.table-unseen-col td:nth-last-child(1) a.btn
-	{
-		display: none;
-	}
+    .table-unseen-col th:nth-child(1),
+    .table-unseen-col td:nth-child(1),
+
+    .table-unseen-col th:nth-child(2),
+    .table-unseen-col td:nth-child(2),
+
+    .table-unseen-col th:nth-last-child(1),
+    .table-unseen-col td:nth-last-child(1)
+
+    {
+        display: table-cell !important;
+    }
 
 
-	/** In the last column, show only the first button **/
+    /** In the last column, hide all buttons **/
 
-	.table-unseen-col td:nth-last-child(1) a.btn:nth-child(1)
-	{
-		display: inline-block;
-	}
+    .table-unseen-col td:nth-last-child(1) a.btn
+    {
+        display: none;
+    }
 
 
-	/** Constrain the size on our first column, presumably an index of some sort **/
+    /** In the last column, show only the first button **/
 
-	.table-unseen-col td:nth-child(1)
-	{
-		width: 25px;
-	}
+    .table-unseen-col td:nth-last-child(1) a.btn:nth-child(1)
+    {
+        display: inline-block;
+    }
+
+
+    /** Constrain the size on our first column, presumably an index of some sort **/
+
+    .table-unseen-col td:nth-child(1)
+    {
+        width: 25px;
+    }
 }
 
 
 @media only screen and (max-width: 800px) {
-	
-	/* Force table to not be like tables anymore */
-	.table-no-more table, 
-	.table-no-more thead, 
-	.table-no-more tbody, 
-	.table-no-more th, 
-	.table-no-more td, 
-	.table-no-more tr 
-	{ 
-		display: block; 
-	}
- 
-	/* Hide table headers (but not display: none;, for accessibility) */
-	.table-no-more thead tr 
-	{ 
-		position: absolute;
-		top: -9999px;
-		left: -9999px;
-	}
- 
-	.table-no-more tr 
-	{ 
-		border: 1px solid #ccc; 
-	}
- 
-	.table-no-more td 
-	{ 
-		/* Behave  like a "row" */
-		border: none;
-		border-bottom: 1px solid #eee; 
-		position: relative;
-		padding-left: 50%; 
-		white-space: normal;
-		text-align:left;
-	}
- 
-	.table-no-more td:before 
-	{ 
-		/* Now like a table header */
-		position: absolute;
-		/* Top/left values mimic padding */
-		top: 6px;
-		left: 6px;
-		width: 45%; 
-		padding-right: 10px; 
-		white-space: nowrap;
-		text-align:left;
-		font-weight: bold;
-	}
- 
-	/*
-	Label the data
-	*/
-	.table-no-more td:before 
-	{ 
-		content: attr(data-title); 
-	}
+    
+    /* Force table to not be like tables anymore */
+    .table-no-more table,
+    .table-no-more thead,
+    .table-no-more tbody,
+    .table-no-more th,
+    .table-no-more td,
+    .table-no-more tr
+    {
+        display: block;
+    }
+
+    /* Hide table headers (but not display: none;, for accessibility) */
+    .table-no-more thead tr
+    {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    .table-no-more tr
+    {
+        border: 1px solid #ccc;
+    }
+
+    .table-no-more td
+    {
+        /* Behave  like a "row" */
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+        white-space: normal;
+        text-align:left;
+    }
+
+    .table-no-more td:before
+    {
+        /* Now like a table header */
+        position: absolute;
+        /* Top/left values mimic padding */
+        top: 6px;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align:left;
+        font-weight: bold;
+    }
+
+    /*
+    Label the data
+    */
+    .table-no-more td:before
+    {
+        content: attr(data-title);
+    }
 }

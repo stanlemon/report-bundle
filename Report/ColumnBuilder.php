@@ -1,7 +1,7 @@
 <?php
 namespace Lemon\ReportBundle\Report;
 
-class ColumnBuilder 
+class ColumnBuilder
 {
     protected $data;
 

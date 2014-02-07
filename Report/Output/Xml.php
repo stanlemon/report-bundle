@@ -4,8 +4,8 @@ namespace Lemon\ReportBundle\Report\Output;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
-class Xml implements OutputInterface {
-    
+class Xml implements OutputInterface
+{
     protected $data;
 
     public function __construct(array $data)

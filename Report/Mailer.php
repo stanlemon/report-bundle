@@ -5,7 +5,7 @@ use Swift_Mailer;
 use Swift_Attachment;
 use Lemon\ReportBundle\Report\Output\Csv;
 
-class Mailer 
+class Mailer
 {
     protected $engine;
     protected $mailer;
@@ -78,7 +78,7 @@ class Mailer
     {
         return Swift_Attachment::newInstance(
             $this->getRenderer()->render(),
-            $this->report->getSlug() . '-' . date('Ymd') . '.csv', 
+            $this->report->getSlug() . '-' . date('Ymd') . '.csv',
             'text/csv'
         );
     }

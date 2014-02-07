@@ -1,7 +1,7 @@
 <?php
 namespace Lemon\ReportBundle\Report\Output;
 
-interface OutputInterface {
-    
+interface OutputInterface
+{
     public function render();
 }

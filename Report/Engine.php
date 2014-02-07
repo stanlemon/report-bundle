@@ -6,7 +6,7 @@ use Lemon\ReportBundle\Report\Executor;
 use Lemon\ReportBundle\Report\Loader\RepositoryInterface;
 use Psr\Log\LoggerInterface;
 
-class Engine 
+class Engine
 {
     protected $report = null;
     protected $params = array();
