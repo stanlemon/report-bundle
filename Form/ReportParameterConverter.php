@@ -25,7 +25,7 @@ class ReportParameterConverter
     public function createNamedFormBuilder($formName = null, Report $report, $data = array())
     {
         $formBuilder = $this->formFactory->createNamedBuilder($formName, 'form', $data, array(
-            'csrf_protection' => false // TODO: This is only necessary on GET requests
+            'csrf_protection' => false
         ));
 
         foreach ($report->getParameters() as $parameter) {
