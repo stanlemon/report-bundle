@@ -11,24 +11,13 @@ class Executor
     protected $logger;
     protected $connection;
     protected $queryRenderer;
-
+    protected $start;
+    protected $end;
     protected $report;
-
-    public function __construct()
-    {
-    }
-
-    public function setReport(Report $report)
-    {
-        $this->report = $report;
-        return $this;
-    }
 
     public function execute($values = array()) 
     {
         $this->start = microtime(true);
-        
-        //SqlFormatter::splitQuery() @todo
 
         $this->queryRenderer->render($this->report, $values);
 
@@ -72,6 +61,12 @@ class Executor
     public function getQuery()
     {
         return $this->queryRenderer->getQuery();
+    }
+
+    public function setReport(Report $report)
+    {
+        $this->report = $report;
+        return $this;
     }
 
     public function setQueryRenderer(QueryRenderer $queryRenderer)

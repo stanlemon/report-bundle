@@ -31,6 +31,7 @@ class ReportController
     protected $reportExecutor;
     protected $reportLoader;
     protected $reportEngine;
+    protected $reportParameterConverter;
     protected $debug;
 
     public function listAction()

@@ -3,6 +3,8 @@ namespace Lemon\ReportBundle\Report;
 
 class ColumnBuilder 
 {
+    protected $data;
+
     public function __construct(array $data)
     {
         $this->data = $data;

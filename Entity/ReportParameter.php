@@ -150,7 +150,7 @@ class ReportParameter
      */
     public function setRequired($required)
     {
-        $this->required;
+        $this->required = $required;
 
         return $this;
     }

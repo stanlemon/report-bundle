@@ -14,11 +14,11 @@ class EmailReportCommand extends ContainerAwareCommand
     protected $input;
     protected $output;
     protected $reportEngine;
+    protected $mailer;
     protected $report;
     protected $from;
     protected $to;
     protected $params;
-    protected $attachment;
 
     protected function configure()
     {
