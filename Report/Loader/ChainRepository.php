@@ -36,7 +36,7 @@ class ChainRepository implements RepositoryInterface
         foreach ($this->repositories as $repository) {
             $reports = array_merge(
                 $reports,
-                $repository->findAll();
+                $repository->findAll()
             );
         }
 

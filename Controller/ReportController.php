@@ -5,7 +5,6 @@ namespace Lemon\ReportBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationRequestHandler;
 use Symfony\Component\Form\FormFactory;
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
@@ -14,15 +13,12 @@ use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Pagerfanta\View\TwitterBootstrapView as PagerView;
 
-
 use Lemon\ReportBundle\Report\Executor;
 use Lemon\ReportBundle\Report\ColumnBuilder;
 use Lemon\ReportBundle\Report\Loader\RepositoryInterface;
-use Lemon\ReportBundle\Report\Output\Csv;
-use Lemon\ReportBundle\Report\Output\Json;
-use Lemon\ReportBundle\Report\Output\Xml;
 use Lemon\ReportBundle\Form\ReportParameterConverter;
 use Lemon\ReportBundle\Report\Exception as ReportException;
+
 
 class ReportController
 {

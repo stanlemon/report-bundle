@@ -1,10 +1,9 @@
 <?php
 namespace Lemon\ReportBundle\Report\Query;
 
-use Psr\Log\LoggerInterface;
-use Doctrine\DBAL\Connection;
-use Lemon\ReportBundle\Entity\Report;
-use Lemon\ReportBundle\Report\Query\Renderer\Exception;
+use Twig_Environment;
+use Twig_Error_Syntax;
+use Lemon\ReportBundle\Report\Query\Renderer\Exception as RendererException;
 
 class Renderer
 {
@@ -19,7 +18,7 @@ class Renderer
             );
             
             return $this->query;
-        } catch (\Twig_Error_Syntax $e) {
+        } catch (Twig_Error_Syntax $e) {
             throw new RendererException($e->getMessage());
         }
     }
@@ -37,7 +36,7 @@ class Renderer
         return $this->report->getParameters();
     }
 
-    public function setTwig(\Twig_Environment $twig)
+    public function setTwig(Twig_Environment $twig)
     {
         $this->twig = $twig;
     }

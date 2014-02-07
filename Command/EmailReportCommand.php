@@ -2,12 +2,10 @@
 namespace Lemon\ReportBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Swift_Mailer;
-use Swift_Attachment;
 use InvalidArgumentException;
 use Lemon\ReportBundle\Report\Mailer as ReportMailer;
 

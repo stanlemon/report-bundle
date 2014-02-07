@@ -5,8 +5,6 @@ namespace Lemon\ReportBundle\Report\Loader;
 use Doctrine\ORM\EntityRepository;
 use Psr\Log\LoggerInterface;
 
-use Lemon\ReportBundle\Report\Loader\LoaderInterface;
-
 class OrmRepository extends EntityRepository implements RepositoryInterface
 {
     protected $logger;

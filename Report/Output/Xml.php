@@ -3,9 +3,6 @@ namespace Lemon\ReportBundle\Report\Output;
 
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
-
 
 class Xml implements OutputInterface {
     
