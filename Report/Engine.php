@@ -15,11 +15,17 @@ class Engine
     protected $executor;
     protected $logger;
 
+    public function all()
+    {
+        return $this->repository->findAll();
+    }
+
     public function load($id)
     {
         if (null === ($this->report = $this->repository->findById($id))) {
             throw new Exception("Report does not exist!");
         }
+        $this->params = array();
         return $this->report;
     }
 
@@ -31,23 +37,14 @@ class Engine
 
     public function run()
     {
-        $this->results = $this->executor->setReport(
+        return $this->executor->setReport(
             $this->report
         )->execute($this->params);
-
-        return $this;
     }
 
-    public function results()
+    public function query()
     {
-        return $this->results;
-    }
-
-    public function free()
-    {
-        $this->report = null;
-        $this->params = array();
-        $this->results = array();
+        return $this->executor->getQuery();
     }
 
     public function setRepository(RepositoryInterface $repository)

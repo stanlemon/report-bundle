@@ -5,18 +5,18 @@ namespace Lemon\ReportBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Form\FormFactory;
-use Doctrine\DBAL\Connection;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Psr\Log\LoggerInterface;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Pagerfanta\View\TwitterBootstrapView as PagerView;
-use Lemon\ReportBundle\Report\Executor;
+use Lemon\ReportBundle\Report\Engine;
 use Lemon\ReportBundle\Report\ColumnBuilder;
-use Lemon\ReportBundle\Report\Loader\RepositoryInterface;
 use Lemon\ReportBundle\Form\ReportParameterConverter;
 use Lemon\ReportBundle\Report\Exception as ReportException;
+use Twig_Environment;
+use Exception;
 
 class ReportController
 {
@@ -26,15 +26,29 @@ class ReportController
     protected $logger;
     protected $serializer;
     protected $router;
-    protected $reportExecutor;
-    protected $reportLoader;
     protected $reportEngine;
     protected $reportParameterConverter;
     protected $debug;
 
+    public function __construct(
+        Engine $reportEngine,
+        ReportParameterConverter $reportParameterConverter,
+        Router $router,
+        Twig_Environment $twig,
+        LoggerInterface $logger = null,
+        $debug = false
+    ) {
+        $this->reportEngine = $reportEngine;
+        $this->reportParameterConverter = $reportParameterConverter;
+        $this->router = $router;
+        $this->twig = $twig;
+        $this->logger = $logger;
+        $this->debug = $debug;
+    }
+
     public function listAction()
     {
-        $reports = $this->reportLoader->findAll();
+        $reports = $this->reportEngine->all();
 
         return new Response($this->twig->render(
             '@LemonReport/Default/list.html.twig',
@@ -65,13 +79,12 @@ class ReportController
             $results = $this->reportEngine
                 ->with($form->getData())
                 ->run()
-                ->results()
             ;
 
             return array($report, $results, $form);
         } catch (ReportException $e) {
             throw new NotFoundHttpException("Report not found!");
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $request->getSession()->set('report_' . $report->getSlug(), array());
             throw $e;
         }
@@ -137,69 +150,9 @@ class ReportController
                 'results'   => $pagerfanta->getCurrentPageResults(),
                 'report'    => $report,
                 'form'      => $form->createView(),
-                'query'     => \SqlFormatter::format($this->reportExecutor->getQuery()),
+                'query'     => \SqlFormatter::format($this->reportEngine->query()),
                 'columns'   => $columns,
             )
         ));
-    }
-
-    public function setReportExecutor(Executor $reportExecutor)
-    {
-        $this->reportExecutor = $reportExecutor;
-        return $this;
-    }
-
-    public function setReportLoader(RepositoryInterface $reportLoader)
-    {
-        $this->reportLoader = $reportLoader;
-        return $this;
-    }
-
-    public function setReportParameterConverter(ReportParameterConverter $reportParameterConverter)
-    {
-        $this->reportParameterConverter = $reportParameterConverter;
-        return $this;
-    }
-    
-    public function setRouter($router)
-    {
-        $this->router = $router;
-        return $this;
-    }
-
-    public function setConnection(Connection $connection)
-    {
-        $this->connection = $connection;
-        return $this;
-    }
-
-    public function setFormFactory(FormFactory $formFactory)
-    {
-        $this->formFactory = $formFactory;
-        return $this;
-    }
-
-    public function setTwig(\Twig_Environment $twig)
-    {
-        $this->twig = $twig;
-        return $this;
-    }
-
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-        return $this;
-    }
-
-    public function setReportEngine($reportEngine)
-    {
-        $this->reportEngine = $reportEngine;
-        return $this;
-    }
-    
-    public function setDebug($debug)
-    {
-        $this->debug = $debug;
-        return $this;
     }
 }

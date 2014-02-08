@@ -50,17 +50,13 @@ services:
 
     lemon_report.report_controller: 
         class: "Lemon\\ReportBundle\\Controller\\ReportController"
-        calls:
-            - [ setConnection, [@doctrine.dbal.default_connection] ]
-            - [ setTwig, ["@twig"] ]
-            - [ setFormFactory, ["@form.factory"] ]
-            - [ setReportLoader, ["@lemon_report.report_loader"] ]
-            - [ setReportExecutor, ["@lemon_report.report_executor"] ]
-            - [ setRouter, ["@router"] ]
-            - [ setLogger, ["@logger"] ]
-            - [ setReportParameterConverter, ["@lemon_report.form_report_parameter_converter"] ]
-            - [ setReportEngine, ["@lemon_report.report_engine"] ]
-            - [ setDebug, ['%kernel.debug%'] ]
+        arguments:
+            - @lemon_report.report_engine
+            - @lemon_report.form_report_parameter_converter
+            - @router
+            - @twig
+            - @logger
+            - '%kernel.debug%'
 
     lemon_report.form_report_parameter_converter: 
         class: "Lemon\\ReportBundle\\Form\\ReportParameterConverter"
