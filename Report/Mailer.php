@@ -30,7 +30,6 @@ class Mailer
         $this->results = $this->engine
             ->with($params)
             ->run()
-            ->results()
         ;
 
         return $this;
