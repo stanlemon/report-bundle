@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Report
  *
- * @ORM\Table()
+ * @ORM\Table("report")
  * @ORM\Entity(repositoryClass="Lemon\ReportBundle\Report\Loader\OrmRepository")
  */
 class Report
