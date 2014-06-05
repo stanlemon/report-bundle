@@ -10,7 +10,7 @@ use Psr\Log\LoggerInterface;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Exception\NotValidCurrentPageException;
-use Pagerfanta\View\TwitterBootstrapView as PagerView;
+use Pagerfanta\View\TwitterBootstrap3View as PagerView;
 use Lemon\ReportBundle\Report\Engine;
 use Lemon\ReportBundle\Report\ColumnBuilder;
 use Lemon\ReportBundle\Form\ReportParameterConverter;
