@@ -99,6 +99,14 @@ class ReportController
         $output = new $class($results);
         $response = new Response($output->render());
         $response->headers->set("Content-type", "application/{$type}");
+
+        if ($type == 'csv') {
+            $response->headers->set(
+                'Content-Disposition',
+                sprintf("attachment;filename=%s", $report->getSlug() . ".csv")
+            );
+        }
+
         return $response;
     }
 
