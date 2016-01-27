@@ -6,6 +6,8 @@ use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
 use Lemon\ReportBundle\Entity\Report;
 use Lemon\ReportBundle\Entity\ReportParameter;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class ReportParameterConverter
 {
@@ -24,7 +26,7 @@ class ReportParameterConverter
 
     public function createNamedFormBuilder($formName, Report $report, $data = array())
     {
-        $formBuilder = $this->formFactory->createNamedBuilder($formName, 'form', $data, array(
+        $formBuilder = $this->formFactory->createNamedBuilder($formName, FormType::class, $data, array(
             'csrf_protection' => false
         ));
 
@@ -38,7 +40,7 @@ class ReportParameterConverter
             $formBuilder->add($parameter->getName(), $parameter->getType(), $options);
         }
 
-        $formBuilder->add('Search', 'submit', array(
+        $formBuilder->add('Search', SubmitType::class, array(
             'attr' => array(
                 'class' => 'btn btn-primary'
             )
@@ -91,7 +93,7 @@ class ReportParameterConverter
 
         return $options;
     }
-    
+
     protected function handleConstraints(array &$options)
     {
         if (!isset($options['constraints']) || !is_array($options['constraints']) || empty($options['constraints'])) {

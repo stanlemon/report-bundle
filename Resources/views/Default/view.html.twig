@@ -60,7 +60,7 @@
     </div>
 
     {% if report.parameters is not empty %}
-    <form method="post" action="{{path('lemon_report_view', { id: report.id })}}" {{ form_enctype(form) }}>
+    <form method="post" action="{{path('lemon_report_view', { id: report.id })}}">
         <div class="row">
         {{form_widget(form)}}
     </div>
