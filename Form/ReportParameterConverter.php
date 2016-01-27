@@ -1,6 +1,7 @@
 <?php
 namespace Lemon\ReportBundle\Form;
 
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormFactory;
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
@@ -66,14 +67,14 @@ class ReportParameterConverter
             $value = current(array_slice($keySet, 1, 1));
 
             foreach ($results as $result) {
-                $values[$result[$key]] = $result[$value];
+                $values[$result[$value]] = $result[$key];
             }
 
             $options = array_merge($options, array(
                 'choices' => $values,
             ));
 
-            $parameter->setType('choice');
+            $parameter->setType(ChoiceType::class);
         }
 
         $normalizer = new \Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer();

@@ -70,9 +70,10 @@ class ReportController
 
             $form = $formBuilder->getForm();
 
-            if ($request->isMethod('post')) {
-                $form->bind($request);
+            $form->handleRequest($request);
 
+
+            if ($form->isSubmitted()) {
                 $request->getSession()->set('report_' . $report->getSlug(), $form->getData());
             }
 
