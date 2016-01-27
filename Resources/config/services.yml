@@ -19,8 +19,7 @@ services:
 
     lemon_report.orm_repository:
         class: "Lemon\\ReportBundle\\Report\\Loader\\OrmRepository"
-        factory_service: doctrine
-        factory_method: getRepository
+        factory: ["@doctrine", getRepository]
         arguments:
             - "Lemon\\ReportBundle\\Entity\\Report"
         calls:
@@ -41,8 +40,7 @@ services:
 
     lemon_report.report_loader:
         class: "%lemon_report.report_loader.class%"
-        factory_service: doctrine
-        factory_method: getRepository
+        factory: ["@doctrine", getRepository]
         arguments:
             - "Lemon\\ReportBundle\\Entity\\Report"
         calls:
