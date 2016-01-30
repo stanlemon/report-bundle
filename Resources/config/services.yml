@@ -5,11 +5,6 @@ parameters:
 
 services:
 
-    twig.loader.string:
-        class: "Twig_Loader_String"
-        tags:
-            - { name: twig.loader }
-
     lemon_report.report_engine:
         class: "Lemon\\ReportBundle\\Report\\Engine"
         calls:

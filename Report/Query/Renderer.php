@@ -16,8 +16,8 @@ class Renderer
         $this->report = $report;
 
         try {
-            $this->query = $this->twig->render(
-                $this->report->getQuery(),
+            $template = $this->twig->createTemplate($this->report->getQuery());
+            $this->query = $template->render(
                 array_merge($this->report->getParameterArray(), $values)
             );
             
