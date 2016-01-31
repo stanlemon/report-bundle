@@ -1,19 +1,29 @@
 <?php
 namespace Lemon\ReportBundle\Form;
 
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\FormFactory;
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
-use Lemon\ReportBundle\Entity\Report;
-use Lemon\ReportBundle\Entity\ReportParameter;
+use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Lemon\ReportBundle\Entity\Report;
+use Lemon\ReportBundle\Entity\ReportParameter;
 
 class ReportParameterConverter
 {
+    /**
+     * @var Connection
+     */
     protected $connection;
+    /**
+     * @var FormFactory
+     */
     protected $formFactory;
+    /**
+     * @var LoggerInterface
+     */
     protected $logger;
 
     public function __construct()
@@ -38,7 +48,11 @@ class ReportParameterConverter
                 $options['data'] = $data[$parameter->getName()];
             }
 
-            $formBuilder->add($parameter->getName(), $parameter->getType(), $options);
+            $className = '\\Symfony\\Component\\Form\\Extension\\Core\\Type\\' . ucfirst($parameter->getType()) . 'Type';
+
+            $type = (class_exists($className)) ? $className : TextType::class;
+
+            $formBuilder->add($parameter->getName(), $type, $options);
         }
 
         $formBuilder->add('Search', SubmitType::class, array(
