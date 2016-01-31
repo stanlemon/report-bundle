@@ -50,7 +50,13 @@ class ReportParameterConverter
 
             $className = '\\Symfony\\Component\\Form\\Extension\\Core\\Type\\' . ucfirst($parameter->getType()) . 'Type';
 
-            $type = (class_exists($className)) ? $className : TextType::class;
+            if (class_exists($parameter->getType())) {
+                $type = $parameter->getType();
+            } else if (class_exists($className)) {
+                $type = $className;
+            } else {
+                $type = TextType::class;
+            }
 
             $formBuilder->add($parameter->getName(), $type, $options);
         }
